@@ -35,6 +35,73 @@ No idea about the exam. As per suggestion from experiance folks took the [Udemy 
   - Lecture 3
     - Introduction to the pod which is an object in Kubernetes inside which container is running.
     - Can we run multiple containers inside one pod? Yes, we can but running the same kind of container in the same pod is not the right practice though we can run a helper container in the same pod.
-    - Containers in the same pod shares the same network and volumes by default.
+    - Containers in the same pod share the same network and volumes by default.
     - `kubectl run nginx --image nginx`: Command to run a pod with a particular image.
     - `kubectl get pods`: Command to list down all the pods.
+  - Lecture 4
+    - Introduction to the definition file - A file has 4 sections `apiVersion`, `kind`, `metadata`, and `spec`
+    - apiVersion: Different objects have different versions
+      - Pod: v1
+      - Service: v1
+      - ReplicaSet: app/v1
+      - Deployment: apps/v1
+    - kind: here we will mention the object that we have to create.
+    - metadata: This section includes the details about the object. The parents should have less space than the child and the siblings should be on the same line.
+    - spec: Contains information related to the container.
+    - `kubectl create -f definition.yaml`
+    - `kubectl get pods`
+    - `kubectl get pods -o wide`
+    - `kubectl describe pod podName`
+    - create a pod with image name `kubectl run podName --image=imageName`
+    - To create a yaml file `kubectl run podName --image=imageName --dry-run=client -o yaml > filename.yaml`
+    - Details about pod `kubectl describe pod podName -n namespace`
+    - `kubectl edit pod podName`
+    - `kubectl delete pod podName`
+  - ReplicaSet
+    - This is a controller which maintains the mentioned number of replicas of the Pod.
+    - Load balancing and availability are been taken care with the replicaset.
+    - Replicaset can create pods in other nodes as well.
+    - ReplicationController Definition file
+      ```
+        apiVersion: v1
+        kind: ReplicationController
+        metadata:
+          name:
+          labels:
+        spec:
+          template:
+            metadata:
+              name:
+              labels:
+            spec:
+              containers:
+              - name:
+                image:
+          replicas:
+      ```
+    - Replicaset definition file
+      ```
+        apiVersion: apps/v1
+        kind: ReplicaSet
+        metadata:
+          name:
+          labels:
+        spec:
+          template:
+            metadata:
+              name:
+              labels:
+            spec:
+              containers:
+              - name:
+                image:
+          replicas:
+          selector:
+            matchLabels:
+              type: front-end
+      ```
+    - Commands to scale the replicas
+      - update the definition file and run `kubectl replace -f replicaset-definition.yaml`
+      - `kubectl scale --replicas=6 -f replicaset-definition.yaml`
+      - `kubectl scale --replicas=6 replicaset my-app-replicaset`
+      - `kubectl delete replicaset replicasetName`
