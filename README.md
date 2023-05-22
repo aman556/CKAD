@@ -4,7 +4,7 @@ CKAD prepration Collection
 
 ## Start of the Journey
 
-No idea about the exam. As per suggestion from experiance folks took the [Udemy course](https://www.udemy.com/course/certified-kubernetes-application-developer/learn/lecture/12299352#overview).
+No idea about the exam. As per suggestion from experience folks took the [Udemy course](https://www.udemy.com/course/certified-kubernetes-application-developer/learn/lecture/12299352#overview).
 
 ### Course details lecture by lecture
 
@@ -105,3 +105,102 @@ No idea about the exam. As per suggestion from experiance folks took the [Udemy 
       - `kubectl scale --replicas=6 -f replicaset-definition.yaml`
       - `kubectl scale --replicas=6 replicaset my-app-replicaset`
       - `kubectl delete replicaset replicasetName`
+      - `kubectl explain replicaset`
+  - Lecture 5: Deployments
+    - If you want to deploy your application on production then using deployment the task will become easy. As, you can update, pause, resume, rollback and other operations on the applications.
+    In hierarchy, deployment comes above replicaset.
+    - Deployment definition file
+      ```
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name:
+          labels:
+        spec:
+          template:
+            metadata:
+              name:
+              labels:
+            spec:
+              containers:
+              - name:
+                image:
+          replicas:
+          selector:
+            matchLabels:
+              type: front-end
+      ```
+  - Tips
+    - kubectl [command] [TYPE] [NAME] -o <output_format>
+      Here are some of the commonly used formats:
+      `-o json` Output a JSON formatted API object.
+      `-o name` Print only the resource name and nothing else.
+      `-o wide` Output in the plain-text format with any additional information.
+      `-o yaml` Output a YAML formatted API object.
+    https://kubernetes.io/docs/reference/kubectl/overview/
+    https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+  - Lecture 5: Namespace
+    If you want to separate the environment of a set of resources then you can create those resources in the same namespace.
+    - Namespace definition file
+      ```
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name:
+      ```
+  - Lecture 6:
+    Different imperative commands to run pods and services
+    - Need to more understand about `kubectl run`, `kubectl expose`.
+- Section 2:
+  - Lecture 1: Command, arguments, and Env
+    - Definition file with command arg and env field
+    ```
+    ---
+    apiVersion: v1 
+    kind: Pod 
+    metadata:
+      name: pod-name
+      labels:
+        name: label-name
+    spec:
+      containers:
+      - name: container-name
+        image: image-name
+        command: ["command1", "command2"]| command:
+                                         | - "command1"
+                                         | - "command1\2"
+        args: ["arg1", "arg2"]
+        env:
+          - name: ""
+            value: ""
+    ```
+    - Dockerfile
+    ```
+    ENTRYPOINT ["", ""]
+    ARG ["", ""]
+    ```
+  - Lecture 2: Config map
+    When the amount of definition files is large and you want to maintain and reuse your config data then you can create config maps.
+    - Command:
+      `kubectl create configmap name --from-literal=key=value`
+      `kubectl create configmap name --from-file=filepath`
+    - Definition file
+      ```
+      ---
+      apiVersion: v1 
+      kind: ConfigMap 
+      metadata:
+        name: pod-name
+      data:
+        key: value
+      ```
+    - Pod injection
+      ```
+      spec:
+      containers:
+      - name: container-name
+        image: image-name
+        envFrom:
+         - configMapRef:
+            name: configMapName 
+      ```
